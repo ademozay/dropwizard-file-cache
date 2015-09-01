@@ -23,8 +23,7 @@ public class FileCacheManagerImpl implements FileCacheManager {
 	private static String CACHE_MANAGER_FOLDER;
 	private static String TEMP_DIR;
 	private static String MAIN_CACHE_FOLDER;
-	
-	private static Map<FileCacheInstance, FileCacheManager> INSTANCES = Collections.synchronizedMap(new ConcurrentHashMap<FileCacheInstance, FileCacheManager>());
+	private static Map<FileCacheManagerInstance, FileCacheManager> INSTANCES = Collections.synchronizedMap(new ConcurrentHashMap<FileCacheManagerInstance, FileCacheManager>());
 	
 	private String exactCacheFolder;
 	
@@ -45,7 +44,7 @@ public class FileCacheManagerImpl implements FileCacheManager {
 	}
 
 	public static FileCacheManager getFileCacheManager(String cacheFolder) {
-		FileCacheInstance instance = new FileCacheInstance(cacheFolder);
+		FileCacheManagerInstance instance = new FileCacheManagerInstance(cacheFolder);
 		if (!INSTANCES.containsKey(instance)) {
 			FileCacheManager cacheManager;
 			synchronized (FileCacheManagerImpl.class) {
@@ -153,12 +152,10 @@ public class FileCacheManagerImpl implements FileCacheManager {
 
 	@Override
 	public void clear() throws IOException {
-		synchronized (this) {
-			File dir = new File(exactCacheFolder);
-			for (File file : dir.listFiles()) {
-				if (!file.isDirectory()) {
-					file.delete();
-				}
+		File dir = new File(exactCacheFolder);
+		for (File file : dir.listFiles()) {
+			if (!file.isDirectory()) {
+				file.delete();
 			}
 		}
 	}
@@ -171,8 +168,8 @@ public class FileCacheManagerImpl implements FileCacheManager {
 	private void writeFileAttribute(Path p, FileAttribute... fas) throws IOException {
 		UserDefinedFileAttributeView view = java.nio.file.Files.getFileAttributeView(p, UserDefinedFileAttributeView.class);
 		for (FileAttribute fa : fas) {
-			final byte[] array = fa.getValue().getBytes(Charsets.UTF_8);
-			final ByteBuffer buf = ByteBuffer.wrap(array);
+			byte[] array = fa.getValue().getBytes(Charsets.UTF_8);
+			ByteBuffer buf = ByteBuffer.wrap(array);
 			view.write(fa.getKey(), buf);
 		}
 	}
