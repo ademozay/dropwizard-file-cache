@@ -1,10 +1,10 @@
 package com.ademozay.dropwizard.filecache;
 
-public class FileCacheManagerInstance {
+public class FileCacheInstance {
 
 	private String folder;
 
-	public FileCacheManagerInstance(String folder) {
+	public FileCacheInstance(String folder) {
 		this.folder = folder;
 	}
 
@@ -24,7 +24,7 @@ public class FileCacheManagerInstance {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		FileCacheManagerInstance other = (FileCacheManagerInstance) obj;
+		FileCacheInstance other = (FileCacheInstance) obj;
 		if (folder == null) {
 			if (other.folder != null)
 				return false;
