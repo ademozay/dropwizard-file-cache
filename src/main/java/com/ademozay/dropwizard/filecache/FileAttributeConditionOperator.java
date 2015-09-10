@@ -22,7 +22,7 @@ public enum FileAttributeConditionOperator implements FileAttributeConditionOper
 		}
 	},
 
-	GREATER {
+	GREATER_THAN {
 		@Override
 		public boolean apply(FileAttributeType fileAttributeType, String attributeValue, String conditionValue) {
 			switch (fileAttributeType) {
@@ -36,8 +36,23 @@ public enum FileAttributeConditionOperator implements FileAttributeConditionOper
 			}
 		}
 	},
+	
+	GREATER_OR_EQUALS {
+		@Override
+		public boolean apply(FileAttributeType fileAttributeType, String attributeValue, String conditionValue) {
+			switch (fileAttributeType) {
+			case DATE: {
+				DateTime attributeDate = new DateTime(Long.valueOf(attributeValue));
+				DateTime conditionDate = new DateTime(Long.valueOf(conditionValue));
+				return conditionDate.isAfter(attributeDate) || conditionDate.isEqual(attributeDate);
+			}
+			default:
+				throw new IllegalArgumentException(String.format("%s attribute type cannot perfom %s operation", fileAttributeType, this));
+			}
+		}
+	},
 
-	LESS {
+	LESS_THAN {
 		@Override
 		public boolean apply(FileAttributeType fileAttributeType, String attributeValue, String conditionValue) {
 			switch (fileAttributeType) {
@@ -50,6 +65,22 @@ public enum FileAttributeConditionOperator implements FileAttributeConditionOper
 				throw new IllegalArgumentException(String.format("%s attribute type cannot perfom %s operation", fileAttributeType, this));
 			}
 		}
-	};
+	},
+	
+	LESS_OR_EQUALS {
+		@Override
+		public boolean apply(FileAttributeType fileAttributeType, String attributeValue, String conditionValue) {
+			switch (fileAttributeType) {
+			case DATE: {
+				DateTime attributeDate = new DateTime(Long.valueOf(attributeValue));
+				DateTime conditionDate = new DateTime(Long.valueOf(conditionValue));
+				return conditionDate.isBefore(attributeDate) || conditionDate.isEqual(attributeDate);
+			}
+			default:
+				throw new IllegalArgumentException(String.format("%s attribute type cannot perfom %s operation", fileAttributeType, this));
+			}
+		}
+	}
+	;
 
 }
