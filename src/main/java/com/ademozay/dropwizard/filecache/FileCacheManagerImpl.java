@@ -195,4 +195,12 @@ public class FileCacheManagerImpl implements FileCacheManager {
 		return conditionStatus;
 	}
 
+	@Override
+	public Long getFreeSpacePercentage() {
+		Path p = Paths.get(exactCacheFolder);
+		Long totalSpace = p.toFile().getTotalSpace();
+		Long usableSpace = p.toFile().getUsableSpace();
+		return (100 * usableSpace) / totalSpace;
+	}
+
 }

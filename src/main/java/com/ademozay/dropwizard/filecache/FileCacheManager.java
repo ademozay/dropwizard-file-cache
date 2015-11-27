@@ -31,4 +31,6 @@ public interface FileCacheManager {
 
 	String getExactFilePath(String fileName);
 
+	Long getFreeSpacePercentage();
+
 }
